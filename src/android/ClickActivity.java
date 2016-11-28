@@ -35,6 +35,16 @@ import de.appplant.cordova.plugin.notification.TriggerReceiver;
 public class ClickActivity extends de.appplant.cordova.plugin.notification.ClickActivity {
 
     /**
+     * @param state
+     *      Saved instance state
+     */
+    @Override
+    public void onCreate (Bundle state) {
+        super.onCreate(state);
+        finish();
+    }
+
+    /**
      * Called when local notification was clicked by the user.
      *
      * @param notification

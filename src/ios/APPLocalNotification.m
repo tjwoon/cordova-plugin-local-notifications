@@ -75,8 +75,19 @@
         for (NSDictionary* options in notifications) {
             UILocalNotification* notification;
 
-            notification = [[UILocalNotification alloc]
-                            initWithOptions:options];
+            notification = [UILocalNotification alloc];
+            notification.fireDate = [NSDate dateWithTimeIntervalSince1970:(NSTimeInterval)[[options valueForKey:@"at"] doubleValue]];
+            notification.alertBody = [options objectForKey:@"text"];
+            notification.alertTitle = [options objectForKey:@"title"];
+            notification.category = [options objectForKey:@"category"];
+            notification.soundName = UILocalNotificationDefaultSoundName;
+            
+            NSString *dataString = [options objectForKey:@"data"];
+            NSData *dataData = [dataString dataUsingEncoding:NSUTF8StringEncoding];
+            NSDictionary *dataDict = [NSJSONSerialization JSONObjectWithData:dataData
+                                                                     options:NSJSONReadingMutableContainers
+                                                                       error:nil];
+            notification.userInfo = dataDict;
 
             [self scheduleLocalNotification:[notification copy]];
             [self fireEvent:@"schedule" notification:notification];
